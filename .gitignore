@@ -2,3 +2,9 @@ fcjava/Contents
 *.class
 .idea
 *.iml
+*.classpath
+*.project
+*.springBeans
+*/.settings
+book/target
+book/Users
