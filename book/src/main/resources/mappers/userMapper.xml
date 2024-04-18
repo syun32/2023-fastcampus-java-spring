@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.book.dao.UserMapper">
+
+	<select id="selectAll" resultType="UserDto">
+		SELECT	cust_no
+				, cust_name
+				, phone
+				, join_date
+				, cust_email
+				, grade
+		FROM member_tbl
+		ORDER BY cust_no
+	</select>
+
+	<select id="selectByCustNo" parameterType="string" resultType="UserDto">
+		SELECT	cust_no
+				, cust_name
+				, phone
+				, join_date
+				, cust_email
+				, grade
+		FROM member_tbl 
+		WHERE cust_no = #{cust_no}
+	</select>
+
+	<select id="selectCount" resultType="int">
+		SELECT count(*) 
+		FROM member_tbl
+	</select>
+
+	<select id="selectMaxCustNo" resultType="int">
+		SELECT max(cust_no) + 1
+		FROM member_tbl
+	</select>
+
+	<select id="selectRents" resultType="RentDto">
+		SELECT	cust_no
+				, rent_no
+				, book_code
+				, rent_price
+				, rent_date
+		FROM rent_tbl
+	</select>
+
+	<select id="selectUserTotalRent" resultType="UserDto">
+		SELECT	M.cust_no
+				, M.cust_name
+				, M.grade
+				, SUM(R.rent_price) AS total_rent_price
+		FROM member_tbl M, rent_tbl R
+		WHERE M.cust_no = R.cust_no
+		GROUP BY M.cust_no
+		ORDER BY total_rent_price DESC
+	</select>
+	
+	<insert id="insertUser"> 
+		INSERT INTO member_tbl
+			(	cust_no
+				, cust_name
+			    , phone
+			    , cust_email
+			    , grade
+			)
+		VALUES
+			(
+				#{cust_no}
+			    , #{cust_name}
+			    , #{phone}
+			    , #{cust_email}
+			    , #{grade}
+			)
+	</insert>
+	
+	<update id="updateUser">
+		UPDATE member_tbl
+		SET	cust_name		= #{cust_name}
+		    , phone			= #{phone}
+		    , cust_email	= #{cust_email}
+		    , grade			= #{grade}
+		WHERE cust_no		= #{cust_no}
+	</update>
+
+</mapper>
